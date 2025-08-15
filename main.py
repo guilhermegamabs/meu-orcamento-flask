@@ -41,7 +41,7 @@ def load_user(user_id):
 @app.route('/')
 def index():
     if current_user.is_authenticated:
-        return f'Olá, {current_user.nome}! Você está logado. <a href="/logout">Sair</a>'
+        return render_template('index.html')
     return 'Você não está logado. <a href="/login">Entrar</a>'
 
 @app.route('/login', methods=['GET', 'POST'])

@@ -1,0 +1,27 @@
+<!-- Diz ao Jinja2 para usar o base.html como molde -->
+{% extends 'base.html' %}
+
+<!-- Define o título específico desta página -->
+{% block title %}Página Inicial{% endblock %}
+
+<!-- Coloca o conteúdo a seguir dentro do 'block content' do base.html -->
+{% block content %}
+    <div class="p-5 mb-4 bg-light rounded-3">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">Bem-vindo ao Tool Manager!</h1>
+            
+            {% if current_user.is_authenticated %}
+                <p class="col-md-8 fs-4">
+                    Você está logado. Use o menu acima para navegar ou clique abaixo para sair.
+                </p>
+                <a href="{{ url_for('logout') }}" class="btn btn-primary btn-lg">Sair</a>
+            {% else %}
+                <p class="col-md-8 fs-4">
+                    O sistema de gerenciamento de ferramentas que simplifica seu dia a dia.
+                    Faça o login para começar.
+                </p>
+                <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">Fazer Login</a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
