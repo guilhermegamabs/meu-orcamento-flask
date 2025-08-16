@@ -4,27 +4,42 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Email
 
+# Banco de Dados
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from .config import Config
+from . import models
+
 # UserMixin - implementações padrão métodos de autenticação
 class User(UserMixin):
     def __init__(self, id, email, nome, senha):
         self.id = id
         self.email = email
         self.nome = nome
-        self.password = senha
+        self.senha = senha
         
 # FORMULÁRIO DE LOGIN
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Senha', validators=[DataRequired()])
+    senha = PasswordField('Senha', validators=[DataRequired()])
     submit = SubmitField('Entrar')
 
 USERS_DB = {
     "1": User(id="1", email="joao@example.com", nome="João Silva",senha='1234'),
     "2": User(id="2", email="maria@example.com", nome="Maria Santos", senha='321')
 }
+
+db = SQLAlchemy()
+migrate = Migrate()
    
 app = Flask(__name__)
 app.secret_key = 'pitoco'
+app.config.from_object(Config)
+
+db.init_app(app)
+migrate.init_app(app, db)
+
+
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -45,6 +60,7 @@ def index():
     return 'Você não está logado. <a href="/login">Entrar</a>'
 
 @app.route('/login', methods=['GET', 'POST'])
+@login_required
 def login():
     # Se o usuário já estiver logado, redireciona para a página inicial
     if current_user.is_authenticated:
