@@ -7,8 +7,8 @@ from wtforms.validators import DataRequired, Email
 # Banco de Dados
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from .config import Config
-from . import models
+from .app.config import Config
+from .app import models
 
 # UserMixin - implementações padrão métodos de autenticação
 class User(UserMixin):
